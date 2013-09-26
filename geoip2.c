@@ -10,6 +10,9 @@
 
 VALUE mGeoIP2 = Qnil;
 
+int key = 0;
+char *current_key = "location";
+char tmp_str[255];
 char* result_json = "{";
 
 char *replace_str(const char *str, const char *old, const char *new)
@@ -104,10 +107,6 @@ void silly_pindent(int i)
     buffer[size] = '\0';
     fputs(buffer, stderr);
 }
-
-int key = 0;
-char *current_key = "location";
-char tmp_str[255];
 
 MMDB_decode_all_s * dump_hash(MMDB_s * mmdb, MMDB_decode_all_s *decode_all,
                               int indent)
@@ -242,6 +241,7 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
 
     // free(fname);
 
+    result_json = "{";
 
     Check_Type(ipaddr, T_STRING);
     char *ipstr = StringValuePtr(ipaddr);
