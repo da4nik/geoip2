@@ -1,5 +1,9 @@
 # Ruby GeoIP2 Bindings
 
+## Description
+
+Detects city by ip address by local database from [maxmind.com](http://dev.maxmind.com/geoip/geoip2/geolite2/)
+
 ## Installation
 
 [libmaxminddb](https://github.com/maxmind/libmaxminddb) must be installed.
@@ -10,77 +14,17 @@ gem 'geoip2', github: 'da4nik/geoip2'
 
 ## Usage
 
+Returns nil if nothing found and raises exception if file not opened
+
 ```ruby
 require 'GeoIP2'
-require 'json'
 
-JSON.parse( GeoIP2::locate (<local_db_file.mmdb>, <ip address>) )
-```
+city_name = GeoIP2::locate_city(<local_db_file.mmdb>, <ip address>, <optional lang>)
 
-## Example output
+city_name = GeoIP2::locate_city('GeoLite2-City.mmdb', '77.93.127.33')
+=> Тамбов
 
-```
-{"ru"=> {
-  "city"=> {
-    "geoname_id"=>"484646",
-    "names"=> {
-      "de"=>"Tambow",
-      "en"=>"Tambov",
-      "fr"=>"Tambov",
-      "ja"=>"タンボフ",
-      "ru"=>"Тамбов",
-      "zh-CN"=>"坦波夫"}
-  },
-  "continent"=> {
-    "code"=>"EU",
-    "geoname_id"=>"6255148",
-    "names"=> {
-      "de"=>"Europa",
-      "en"=>"Europe",
-      "es"=>"Europa",
-      "fr"=>"Europe",
-      "ja"=>"ヨーロッパ",
-      "pt-BR"=>"Europa",
-      "ru"=>"Европа",
-      "zh-CN"=>"欧洲"}
-  },
-  "country"=> {
-    "geoname_id"=>"2017370",
-    "iso_code"=>"RU",
-    "names"=> {
-      "de"=>"Russland",
-      "en"=>"Russia",
-      "es"=>"Rusia",
-      "fr"=>"Russie",
-      "ja"=>"ロシア",
-      "pt-BR"=>"Rússia",
-      "ru"=>"Россия",
-      "zh-CN"=>"俄罗斯"}
-  },
-  "location"=> {
-    "time_zone"=>"Europe/Moscow"
-  },
-  "registered_country"=> {
-    "geoname_id"=>"2017370",
-    "iso_code"=>"RU",
-    "names"=> {
-      "de"=>"Russland",
-      "en"=>"Russia",
-      "es"=>"Rusia",
-      "fr"=>"Russie",
-      "ja"=>"ロシア",
-      "pt-BR"=>"Rússia",
-      "ru"=>"Россия",
-      "zh-CN"=>"俄罗斯"}
-  },
-  "subdivisions"=> {
-    "geoname_id"=>"484638",
-    "iso_code"=>"TAM",
-    "names"=> {
-      "en"=>"Tambovskaya Oblast'",
-      "ru"=>"Тамбовская область"}
-  }
- }
-}
+city_name = GeoIP2::locate_city('GeoLite2-City.mmdb', '77.93.127.33', 'en')
+=> Tambov
 ```
 
