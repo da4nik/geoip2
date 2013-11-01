@@ -9,7 +9,55 @@
 
 VALUE mGeoIP2 = Qnil;
 
-VALUE mGeoIP2_locate_city(int argc, VALUE *argv, VALUE self)
+char **lookup_path_parse(char *lookup_path, char *lang)
+{
+
+    char **result;
+    if (NULL != lang)
+        result = malloc(sizeof(char *) * (strlen(lookup_path) + strlen(lang) + 1 ));
+    else
+        result = malloc(sizeof(char *) * (strlen(lookup_path) + 1));
+
+    char *token;
+    char *string = strdup(lookup_path);
+
+    token = strtok(string, " ");
+    int i = 0;
+    while (token != NULL) {
+        result[i++] = token;
+        token = strtok(NULL, " ");
+    }
+    if (NULL != lang) {
+        result[i++] = lang;
+    }
+    result[i] = NULL;
+    return result;
+}
+
+VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang)
+{
+    VALUE return_value = Qnil;
+
+    MMDB_entry_data_s entry_data;
+    char **lp = lookup_path_parse(lookup_path, lang);
+    int status = MMDB_aget_value(&result->entry, &entry_data, lp);
+    if (MMDB_SUCCESS == status)
+    {
+        if (entry_data.offset)
+        {
+            if (entry_data.has_data) {
+                if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING)
+                    return_value = rb_str_new2(strndup((char *)entry_data.utf8_string, entry_data.data_size));
+                if (entry_data.type == MMDB_DATA_TYPE_DOUBLE)
+                    return_value = rb_float_new(entry_data.double_value);
+            }
+        }
+    }
+    free(lp);
+    return return_value;
+}
+
+VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
 {
     VALUE locate_result = Qnil;
 
@@ -36,28 +84,20 @@ VALUE mGeoIP2_locate_city(int argc, VALUE *argv, VALUE self)
     int status = MMDB_open(fname, MMDB_MODE_MMAP, &mmdb);
     if (MMDB_SUCCESS == status)
     {
-        char *lookup_path[] = {"city", "names", lang, NULL};
-
         int gai_error, mmdb_error;
         MMDB_lookup_result_s result =
             MMDB_lookup_string(&mmdb, ip_address, &gai_error, &mmdb_error);
 
         if (result.found_entry)
         {
-            MMDB_entry_data_s entry_data;
-            status = MMDB_aget_value(&result.entry, &entry_data, lookup_path);
-            if (MMDB_SUCCESS == status)
-            {
-                if (entry_data.offset)
-                {
-                    if (entry_data.has_data &&
-                        entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-                        char *string = strndup((char *)entry_data.utf8_string, entry_data.data_size );
-                        locate_result = rb_str_new2(string);
-                        free(string);
-                    }
-                }
-            }
+            locate_result = rb_hash_new();
+            rb_hash_aset(locate_result, rb_str_new2("city"), locate_by_path(&result, "city names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("country"), locate_by_path(&result, "country names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("country_code"), locate_by_path(&result, "country iso_code", NULL));
+            rb_hash_aset(locate_result, rb_str_new2("continent"), locate_by_path(&result, "continent names", lang));
+            //rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, "subdivisions names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, "location latitude", NULL));
+            rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, "location longitude", NULL));
         }
         MMDB_close(&mmdb);
     } else {
@@ -69,5 +109,5 @@ VALUE mGeoIP2_locate_city(int argc, VALUE *argv, VALUE self)
 void Init_GeoIP2()
 {
       mGeoIP2 = rb_define_module("GeoIP2");
-      rb_define_module_function(mGeoIP2, "locate_city", mGeoIP2_locate_city, -1);
+      rb_define_module_function(mGeoIP2, "locate", mGeoIP2_locate, -1);
 }
