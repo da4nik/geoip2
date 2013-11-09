@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.files        = `git ls-files`.split("\n")
   s.extensions   = ['extconf.rb']
-  s.require_path = '.'
+  s.require_paths = ["lib"]
 
   s.add_development_dependency 'rake', '~>10.0'
 end

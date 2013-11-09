@@ -26,7 +26,6 @@ city = GeoIP2::locate('GeoLite2-City.mmdb', '77.93.127.33')
  "country"=>"Россия",
  "country_code"=>"RU",
  "continent"=>"Европа",
- "subdivision"=>nil,
  "latitude"=>52.731700000000004,
  "longitude"=>41.4433}
 
@@ -35,8 +34,10 @@ city = GeoIP2::locate('GeoLite2-City.mmdb', '77.93.127.33', 'en')
  "country"=>"Russia",
  "country_code"=>"RU",
  "continent"=>"Europe",
- "subdivision"=>nil,
  "latitude"=>52.731700000000004,
  "longitude"=>41.4433}
 ```
 
+## TODO
+
+Configuration for db file and default language
