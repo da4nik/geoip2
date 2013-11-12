@@ -14,14 +14,21 @@ gem 'geoip2', github: 'da4nik/geoip2'
 
 ## Usage
 
-Returns nil if nothing found and raises exception if file not opened
+### Configuration, can be moved to rails initializer
 
 ```ruby
-require 'GeoIP2'
+GeoIP2::file '<local_db_file.mmdb>' # default: GeoLite2-City.mmdb
+GeoIP2::locale 'ru' # default: 'ru'
+```
 
-city = GeoIP2::locate(<local_db_file.mmdb>, <ip address>, <optional lang>)
+### Further usage:
 
-city = GeoIP2::locate('GeoLite2-City.mmdb', '77.93.127.33')
+Returns nil if nothing found and raises exception if file not opened or not found
+
+```ruby
+city = GeoIP2::locate(<ip address>, <optional lang>)
+
+city = GeoIP2::locate '77.93.127.33'
 => {"city"=>"Тамбов",
  "country"=>"Россия",
  "country_code"=>"RU",
@@ -29,7 +36,7 @@ city = GeoIP2::locate('GeoLite2-City.mmdb', '77.93.127.33')
  "latitude"=>52.731700000000004,
  "longitude"=>41.4433}
 
-city = GeoIP2::locate('GeoLite2-City.mmdb', '77.93.127.33', 'en')
+city = GeoIP2::locate '77.93.127.33', 'en'
 => {"city"=>"Tambov",
  "country"=>"Russia",
  "country_code"=>"RU",
@@ -37,7 +44,3 @@ city = GeoIP2::locate('GeoLite2-City.mmdb', '77.93.127.33', 'en')
  "latitude"=>52.731700000000004,
  "longitude"=>41.4433}
 ```
-
-## TODO
-
-Configuration for db file and default language

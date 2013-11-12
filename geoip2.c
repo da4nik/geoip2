@@ -61,27 +61,33 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
 {
     VALUE locate_result = Qnil;
 
-    if (argc > 4 || argc == 0) {
+    if (argc > 3 || argc == 0) {
         rb_raise(rb_eArgError, "wrong number of arguments");
     }
 
+
     char *lang;
-    if (argc == 3) {
-        Check_Type(argv[2], T_STRING);
-        lang = StringValuePtr(argv[2]);
-    } else
-    { lang = "ru"; }
+    if (argc == 2) {
+        Check_Type(argv[1], T_STRING);
+        lang = StringValuePtr(argv[1]);
+    } else {
+        VALUE  loc = rb_iv_get(self, "@_locale");
+        Check_Type(loc, T_STRING);
+        lang = StringValuePtr(loc);
+    }
 
-    VALUE filename = argv[0];
-    VALUE ipaddr = argv[1];
-
-    Check_Type(filename, T_STRING);
-    char *fname = StringValuePtr(filename);
+    VALUE ipaddr = argv[0];
     Check_Type(ipaddr, T_STRING);
     char *ip_address = StringValuePtr(ipaddr);
 
+    char *filename;
+    VALUE file = rb_iv_get(self, "@_file");
+    Check_Type(file, T_STRING);
+    filename = StringValuePtr(file);
+
+
     MMDB_s mmdb;
-    int status = MMDB_open(fname, MMDB_MODE_MMAP, &mmdb);
+    int status = MMDB_open(filename, MMDB_MODE_MMAP, &mmdb);
     if (MMDB_SUCCESS == status)
     {
         int gai_error, mmdb_error;
@@ -101,13 +107,33 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
         }
         MMDB_close(&mmdb);
     } else {
-        rb_raise(rb_eIOError, "unable to open file %s", fname);
+        rb_raise(rb_eIOError, "unable to open file %s", filename);
     }
     return locate_result;
+}
+
+VALUE mGeoIP2_file(VALUE self, VALUE filepath)
+{
+    rb_iv_set(self, "@_file", filepath);
+    return Qtrue;
+}
+
+VALUE mGeoIP2_locale(VALUE self, VALUE language)
+{
+    rb_iv_set(self, "@_locale", language);
+    return Qtrue;
 }
 
 void Init_GeoIP2()
 {
       mGeoIP2 = rb_define_module("GeoIP2");
       rb_define_module_function(mGeoIP2, "locate", mGeoIP2_locate, -1);
+      rb_define_module_function(mGeoIP2, "file", mGeoIP2_file, 1);
+      rb_define_module_function(mGeoIP2, "locale", mGeoIP2_locale, 1);
+
+      rb_define_attr(mGeoIP2, "_file", 1, 1);
+      rb_define_attr(mGeoIP2, "_locale", 1, 1);
+
+      rb_iv_set(mGeoIP2, "@_file", rb_str_new2("GeoLite2-City.mmdb"));
+      rb_iv_set(mGeoIP2, "@_locale", rb_str_new2("ru"));
 }
