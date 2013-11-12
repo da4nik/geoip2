@@ -95,7 +95,8 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
             rb_hash_aset(locate_result, rb_str_new2("country"), locate_by_path(&result, "country names", lang));
             rb_hash_aset(locate_result, rb_str_new2("country_code"), locate_by_path(&result, "country iso_code", NULL));
             rb_hash_aset(locate_result, rb_str_new2("continent"), locate_by_path(&result, "continent names", lang));
-            //rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, "subdivisions names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, "subdivisions 0 names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("subdivision_code"), locate_by_path(&result, "subdivisions 0 iso_code", NULL));
             rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, "location latitude", NULL));
             rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, "location longitude", NULL));
         }
