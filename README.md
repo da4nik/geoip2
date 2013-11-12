@@ -26,6 +26,9 @@ GeoIP2::locale 'ru' # default: 'ru'
 Returns nil if nothing found and raises exception if file not opened or not found
 
 ```ruby
+require 'GeoIP2' # for non rails apps
+
+
 city = GeoIP2::locate(<ip address>, <optional lang>)
 
 city = GeoIP2::locate '77.93.127.33'
