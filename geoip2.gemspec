@@ -1,6 +1,7 @@
 Gem::Specification.new do |s|
-  s.name         = 'geoip2'
-  s.version      = "0.0.7"
+  s.name         = 'GeoIP2'
+  s.version      = "0.0.8"
+
   s.licenses     = ['WTFPL']
 
   s.authors      = ['Maksim Stepanov']
