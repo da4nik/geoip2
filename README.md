@@ -2,7 +2,9 @@
 
 ## Description
 
-Searches city by ip address in local database from [maxmind.com](http://dev.maxmind.com/geoip/geoip2/geolite2/)
+Searches city by ip address in local database from [maxmind.com](http://dev.maxmind.com/geoip/geoip2/geolite2/).
+
+Use it with rails. For now, I think.
 
 ## Installation
 
@@ -26,9 +28,6 @@ GeoIP2::locale 'ru' # default: 'ru'
 Returns nil if nothing found and raises exception if file not opened or not found
 
 ```ruby
-require 'GeoIP2' # for non rails apps
-
-
 city = GeoIP2::locate(<ip address>, <optional lang>)
 
 city = GeoIP2::locate '77.93.127.33'
