@@ -125,7 +125,7 @@ VALUE mGeoIP2_locale(VALUE self, VALUE language)
     return Qtrue;
 }
 
-void Init_GeoIP2()
+void Init_geoip2()
 {
       mGeoIP2 = rb_define_module("GeoIP2");
       rb_define_module_function(mGeoIP2, "locate", mGeoIP2_locate, -1);
