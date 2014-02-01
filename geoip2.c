@@ -9,10 +9,10 @@
 
 VALUE mGeoIP2 = Qnil;
 
-char **lookup_path_parse(char *lookup_path, char *lang)
+const char **lookup_path_parse(char *lookup_path, char *lang)
 {
 
-    char **result;
+    const char **result;
     if (NULL != lang)
         result = malloc(sizeof(char *) * (strlen(lookup_path) + strlen(lang) + 1 ));
     else
@@ -39,7 +39,7 @@ VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang
     VALUE return_value = Qnil;
 
     MMDB_entry_data_s entry_data;
-    char **lp = lookup_path_parse(lookup_path, lang);
+    const char **lp = lookup_path_parse(lookup_path, lang);
     int status = MMDB_aget_value(&result->entry, &entry_data, lp);
     if (MMDB_SUCCESS == status)
     {
