@@ -7,7 +7,7 @@ $CFLAGS << " #{ENV['CFLAGS']}"
 RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
 
 if have_header('maxminddb.h') and have_library('maxminddb')
-  create_makefile(extension_name)
+  create_makefile("#{extension_name}/#{extension_name}")
 else
   abort "you must have mmdb library"
 end

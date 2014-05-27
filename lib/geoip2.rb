@@ -1,0 +1,1 @@
+require 'geoip2/geoip2'

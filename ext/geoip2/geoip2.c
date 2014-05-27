@@ -105,7 +105,6 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
             rb_hash_aset(locate_result, rb_str_new2("subdivision_code"), locate_by_path(&result, "subdivisions 0 iso_code", NULL));
             rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, "location latitude", NULL));
             rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, "location longitude", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("city_geoname_id"), locate_by_path(&result, "city geoname_id", NULL));
         }
         MMDB_close(&mmdb);
     } else {
