@@ -1,8 +1,8 @@
 require 'mkmf'
 extension_name = 'geoip2'
 
-$LDFLAGS << "#{ENV['LDFLAGS']}"
-$CFLAGS << "#{ENV['CFLAGS']}"
+$LDFLAGS << " #{ENV['LDFLAGS']}"
+$CFLAGS << " #{ENV['CFLAGS']}"
 
 RbConfig::MAKEFILE_CONFIG['CC'] = ENV['CC'] if ENV['CC']
 
