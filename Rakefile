@@ -20,3 +20,5 @@ task :download_free_database do
     `curl http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz | gzip -d > #{file}`
   end
 end
+
+task default: [:compile, :test]
