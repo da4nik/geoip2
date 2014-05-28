@@ -1,7 +1,13 @@
 require "rake/extensiontask"
+require 'rake/testtask'
 
 Rake::ExtensionTask.new "geoip2" do |ext|
   ext.lib_dir = "lib/geoip2"
+end
+
+Rake::TestTask.new do |t|
+  t.pattern = 'spec/**/*_spec.rb'
+  t.libs.push 'spec'
 end
 
 desc "Download free IP to City database"
