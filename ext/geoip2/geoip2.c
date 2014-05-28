@@ -1,6 +1,7 @@
 #include "maxminddb.h"
 
 #include <ruby.h>
+#include <ruby/encoding.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,7 +48,7 @@ VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang
         {
             if (entry_data.has_data) {
                 if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING)
-                    return_value = rb_str_new2(strndup((char *)entry_data.utf8_string, entry_data.data_size));
+                    return_value = rb_enc_str_new(strndup((char *)entry_data.utf8_string, entry_data.data_size), entry_data.data_size, rb_utf8_encoding());
                 if (entry_data.type == MMDB_DATA_TYPE_DOUBLE)
                     return_value = rb_float_new(entry_data.double_value);
             }
