@@ -12,8 +12,9 @@ Gem::Specification.new do |s|
   s.homepage     = "http://github.com"
 
   s.files        = `git ls-files`.split("\n")
-  s.extensions   = ['extconf.rb']
+  s.extensions   = ['ext/geoip2/extconf.rb']
   s.require_paths = ["lib"]
 
   s.add_development_dependency 'rake', '~>10.0'
+  s.add_development_dependency 'rake-compiler'
 end

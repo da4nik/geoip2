@@ -3,3 +3,5 @@ Makefile
 GeoIP2.so
 *.o
 Gemfile.lock
+*.bundle
+GeoLite2-City.mmdb
