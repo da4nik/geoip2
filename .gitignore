@@ -3,3 +3,4 @@ Makefile
 GeoIP2.so
 *.o
 Gemfile.lock
+*.bundle
