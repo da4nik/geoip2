@@ -20,6 +20,10 @@ describe GeoIP2 do
       result['continent_geoname_id'].must_be_instance_of(Fixnum)
     end
 
+    it 'has the correct continent_geoname_id' do
+      result['continent_geoname_id'].must_equal(6255149)
+    end
+
     it 'has a country' do
       result['country'].must_be_instance_of(String)
     end
