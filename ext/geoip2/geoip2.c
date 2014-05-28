@@ -49,6 +49,8 @@ VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang
             if (entry_data.has_data) {
                 if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING)
                     return_value = rb_enc_str_new(strndup((char *)entry_data.utf8_string, entry_data.data_size), entry_data.data_size, rb_utf8_encoding());
+                if (entry_data.type == MMDB_DATA_TYPE_UINT32)
+                    return_value = rb_int_new(entry_data.pointer);
                 if (entry_data.type == MMDB_DATA_TYPE_DOUBLE)
                     return_value = rb_float_new(entry_data.double_value);
             }
@@ -99,13 +101,19 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
         {
             locate_result = rb_hash_new();
             rb_hash_aset(locate_result, rb_str_new2("city"), locate_by_path(&result, "city names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("city_geoname_id"), locate_by_path(&result, "city geoname_id", NULL));
             rb_hash_aset(locate_result, rb_str_new2("country"), locate_by_path(&result, "country names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("country_geoname_id"), locate_by_path(&result, "country geoname_id", NULL));
             rb_hash_aset(locate_result, rb_str_new2("country_code"), locate_by_path(&result, "country iso_code", NULL));
             rb_hash_aset(locate_result, rb_str_new2("continent"), locate_by_path(&result, "continent names", lang));
+            rb_hash_aset(locate_result, rb_str_new2("continent_code"), locate_by_path(&result, "continent code", NULL));
+            rb_hash_aset(locate_result, rb_str_new2("continent_geoname_id"), locate_by_path(&result, "continent geoname_id", NULL));
             rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, "subdivisions 0 names", lang));
             rb_hash_aset(locate_result, rb_str_new2("subdivision_code"), locate_by_path(&result, "subdivisions 0 iso_code", NULL));
+            rb_hash_aset(locate_result, rb_str_new2("postal_code"), locate_by_path(&result, "postal code", NULL));
             rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, "location latitude", NULL));
             rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, "location longitude", NULL));
+            rb_hash_aset(locate_result, rb_str_new2("time_zone"), locate_by_path(&result, "location time_zone", NULL));
         }
         MMDB_close(&mmdb);
     } else {
