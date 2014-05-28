@@ -21,4 +21,15 @@ task :download_free_database do
   end
 end
 
+desc "An IRB console with the project loaded"
+task :console do
+  $: << 'lib'
+  require 'geoip2'
+  GeoIP2.file('GeoLite2-City.mmdb')
+  require 'irb'
+  require 'irb/completion'
+  ARGV.clear
+  IRB.start
+end
+
 task default: [:compile, :test]
