@@ -110,6 +110,7 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
             rb_hash_aset(locate_result, rb_str_new2("continent_geoname_id"), locate_by_path(&result, "continent geoname_id", NULL));
             rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, "subdivisions 0 names", lang));
             rb_hash_aset(locate_result, rb_str_new2("subdivision_code"), locate_by_path(&result, "subdivisions 0 iso_code", NULL));
+            rb_hash_aset(locate_result, rb_str_new2("subdivision_geoname_id"), locate_by_path(&result, "subdivisions 0 geoname_id", NULL));
             rb_hash_aset(locate_result, rb_str_new2("postal_code"), locate_by_path(&result, "postal code", NULL));
             rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, "location latitude", NULL));
             rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, "location longitude", NULL));

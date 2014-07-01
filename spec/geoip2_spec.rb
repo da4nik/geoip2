@@ -52,6 +52,10 @@ describe GeoIP2 do
       result['subdivision_code'].must_be_instance_of(String)
     end
 
+    it 'has a subdivision_geoname_id' do
+      result['subdivision_geoname_id'].must_be_instance_of(Fixnum)
+    end
+
     it 'has a postal_code' do
       result['postal_code'].must_be_instance_of(String)
     end
