@@ -8,7 +8,7 @@
 #include <string.h>
 #include <errno.h>
 
-VALUE mGeoIP2 = Qnil;
+VALUE mMaxmindGeoIP2 = Qnil;
 
 const char **lookup_path_parse(char *lookup_path, char *lang)
 {
@@ -60,7 +60,7 @@ VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang
     return return_value;
 }
 
-VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
+VALUE mMaxmindGeoIP2_locate(int argc, VALUE *argv, VALUE self)
 {
     VALUE locate_result = Qnil;
 
@@ -123,28 +123,28 @@ VALUE mGeoIP2_locate(int argc, VALUE *argv, VALUE self)
     return locate_result;
 }
 
-VALUE mGeoIP2_file(VALUE self, VALUE filepath)
+VALUE mMaxmindGeoIP2_file(VALUE self, VALUE filepath)
 {
     rb_iv_set(self, "@_file", filepath);
     return Qtrue;
 }
 
-VALUE mGeoIP2_locale(VALUE self, VALUE language)
+VALUE mMaxmindGeoIP2_locale(VALUE self, VALUE language)
 {
     rb_iv_set(self, "@_locale", language);
     return Qtrue;
 }
 
-void Init_geoip2()
+void Init_maxmind_geoip2()
 {
-      mGeoIP2 = rb_define_module("GeoIP2");
-      rb_define_module_function(mGeoIP2, "locate", mGeoIP2_locate, -1);
-      rb_define_module_function(mGeoIP2, "file", mGeoIP2_file, 1);
-      rb_define_module_function(mGeoIP2, "locale", mGeoIP2_locale, 1);
+      mMaxmindGeoIP2 = rb_define_module("MaxmindGeoIP2");
+      rb_define_module_function(mMaxmindGeoIP2, "locate", mMaxmindGeoIP2_locate, -1);
+      rb_define_module_function(mMaxmindGeoIP2, "file", mMaxmindGeoIP2_file, 1);
+      rb_define_module_function(mMaxmindGeoIP2, "locale", mMaxmindGeoIP2_locale, 1);
 
-      rb_define_attr(mGeoIP2, "_file", 1, 1);
-      rb_define_attr(mGeoIP2, "_locale", 1, 1);
+      rb_define_attr(mMaxmindGeoIP2, "_file", 1, 1);
+      rb_define_attr(mMaxmindGeoIP2, "_locale", 1, 1);
 
-      rb_iv_set(mGeoIP2, "@_file", rb_str_new2("GeoLite2-City.mmdb"));
-      rb_iv_set(mGeoIP2, "@_locale", rb_str_new2("ru"));
+      rb_iv_set(mMaxmindGeoIP2, "@_file", rb_str_new2("GeoLite2-City.mmdb"));
+      rb_iv_set(mMaxmindGeoIP2, "@_locale", rb_str_new2("ru"));
 }

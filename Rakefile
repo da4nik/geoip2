@@ -1,8 +1,10 @@
 require "rake/extensiontask"
 require 'rake/testtask'
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-Rake::ExtensionTask.new "geoip2" do |ext|
-  ext.lib_dir = "lib/geoip2"
+Rake::ExtensionTask.new "maxmind_geoip2" do |ext|
+  ext.lib_dir = "lib/maxmind_geoip2"
 end
 
 Rake::TestTask.new do |t|
@@ -24,8 +26,8 @@ end
 desc "An IRB console with the project loaded"
 task :console do
   $: << 'lib'
-  require 'geoip2'
-  GeoIP2.file('GeoLite2-City.mmdb')
+  require 'maxmind_geoip2'
+  MaxmindGeoIP2.file('GeoLite2-City.mmdb')
   require 'irb'
   require 'irb/completion'
   ARGV.clear
