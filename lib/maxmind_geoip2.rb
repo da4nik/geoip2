@@ -1,0 +1,1 @@
+require 'maxmind_geoip2/maxmind_geoip2'

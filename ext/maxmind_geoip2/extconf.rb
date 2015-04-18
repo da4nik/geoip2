@@ -1,5 +1,5 @@
 require 'mkmf'
-extension_name = 'geoip2'
+extension_name = 'maxmind_geoip2'
 
 $LDFLAGS << " #{ENV['LDFLAGS']}"
 $CFLAGS << " #{ENV['CFLAGS']}"

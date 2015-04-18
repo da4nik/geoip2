@@ -1,4 +1,4 @@
-# Ruby GeoIP2 Bindings
+# Ruby Maxmind GeoIP2 Bindings
 
 ## Description
 
@@ -11,7 +11,7 @@ Use it with rails. For now, I think.
 [libmaxminddb](https://github.com/maxmind/libmaxminddb) must be installed.
 
 ```
-gem 'geoip2', github: 'da4nik/geoip2'
+gem 'maxmind_geoip2'
 ```
 
 ## Usage
@@ -19,8 +19,8 @@ gem 'geoip2', github: 'da4nik/geoip2'
 ### Configuration, can be moved to rails initializer
 
 ```ruby
-GeoIP2::file '<local_db_file.mmdb>' # default: GeoLite2-City.mmdb
-GeoIP2::locale 'ru' # default: 'ru'
+MaxmindGeoIP2.file '<local_db_file.mmdb>' # default: GeoLite2-City.mmdb
+MaxmindGeoIP2.locale 'ru' # default: 'ru'
 ```
 
 ### Further usage:
@@ -28,9 +28,9 @@ GeoIP2::locale 'ru' # default: 'ru'
 Returns nil if nothing found and raises exception if file not opened or not found
 
 ```ruby
-city = GeoIP2::locate(<ip address>, <optional lang>)
+city = MaxmindGeoIP2.locate(<ip address>, <optional lang>)
 
-city = GeoIP2::locate '77.93.127.33'
+city = MaxmindGeoIP2.locate '77.93.127.33'
 => {"city"=>"Тамбов",
 "city_geoname_id"=>484646,
 "country"=>"Россия",
@@ -46,7 +46,7 @@ city = GeoIP2::locate '77.93.127.33'
 "longitude"=>41.4433,
 "time_zone"=>"Europe/Moscow"}
 
-city = GeoIP2::locate '77.93.127.33', 'en'
+city = MaxmindGeoIP2.locate '77.93.127.33', 'en'
 => {"city"=>"Tambov",
 "city_geoname_id"=>484646,
 "country"=>"Russia",
