@@ -1,5 +1,7 @@
 require "rake/extensiontask"
 require 'rake/testtask'
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
 Rake::ExtensionTask.new "maxmind_geoip2" do |ext|
   ext.lib_dir = "lib/maxmind_geoip2"
