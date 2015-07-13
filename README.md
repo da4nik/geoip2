@@ -16,7 +16,7 @@ It can be used in any standalone Ruby app or in Lotus or in Rails app.
 [libmaxminddb](https://github.com/maxmind/libmaxminddb) must be installed.
 
 ```
-gem 'maxmind_geoip2'
+gem 'maxmind_geoip2', github: 'envato/geoip2'
 ```
 
 ## Usage
