@@ -1,9 +1,6 @@
 # Ruby Maxmind GeoIP2 Bindings
 
-Note: This is a fork version of [da4nik/geoip2](https://github.com/da4nik/geoip2) with strong focus on
-supporting upstream Ruby and stability.
-
-[![Build Status](https://travis-ci.org/envato/geoip2.svg)](https://travis-ci.org/envato/geoip2)
+[![Build Status](https://travis-ci.org/da4nik/geoip2.svg)](https://travis-ci.org/da4nik/geoip2)
 
 ## Description
 
@@ -75,3 +72,7 @@ city = MaxmindGeoIP2.locate '77.93.127.33', 'en'
 ```
 bundle exec rake
 ```
+
+## License
+
+WTFPL
