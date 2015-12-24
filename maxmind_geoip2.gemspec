@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.summary      = "A Binding to the GeoIP2 C library"
   s.description  = 'Generic GeoIP2 lookup tool.'
-  s.homepage     = "http://github.com"
+  s.homepage     = "https://github.com/da4nik/geoip2"
 
   s.files        = `git ls-files`.split("\n")
   s.extensions   = ['ext/maxmind_geoip2/extconf.rb']
