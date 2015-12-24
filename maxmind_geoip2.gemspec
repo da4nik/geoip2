@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.extensions   = ['ext/maxmind_geoip2/extconf.rb']
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'rake', '~>10.0'
-  s.add_development_dependency 'rake-compiler'
+  s.add_development_dependency 'minitest',      '~> 5.8.0'
+  s.add_development_dependency 'rake',          '~> 10.0'
+  s.add_development_dependency 'rake-compiler', '~> 0.9.5'
 end

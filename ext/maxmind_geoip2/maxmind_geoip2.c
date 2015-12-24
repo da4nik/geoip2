@@ -8,7 +8,10 @@
 #include <string.h>
 #include <errno.h>
 
+#define INT2BOOL(x)  ((x)?Qtrue:Qfalse)
+
 VALUE mMaxmindGeoIP2 = Qnil;
+
 
 const char **lookup_path_parse(char *lookup_path, char *lang)
 {

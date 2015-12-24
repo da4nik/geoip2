@@ -1,6 +1,5 @@
 require 'bundler/setup'
 require 'minitest/autorun'
-
 require 'maxmind_geoip2'
 
 unless File.exist?('GeoLite2-City.mmdb')

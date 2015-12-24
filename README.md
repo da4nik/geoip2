@@ -1,27 +1,31 @@
 # Ruby Maxmind GeoIP2 Bindings
 
+[![Build Status](https://travis-ci.org/da4nik/geoip2.svg)](https://travis-ci.org/da4nik/geoip2)
+
 ## Description
 
-Searches city by ip address in local database from [maxmind.com](http://dev.maxmind.com/geoip/geoip2/geolite2/).
+Searches city by IP address in local database from [maxmind.com](http://dev.maxmind.com/geoip/geoip2/geolite2/).
 
-Use it with rails. For now, I think.
+It can be used in any standalone Ruby app or in Lotus or in Rails app.
 
 ## Installation
 
 [libmaxminddb](https://github.com/maxmind/libmaxminddb) must be installed.
 
 ```
-gem 'maxmind_geoip2'
+gem 'maxmind_geoip2', github: 'envato/geoip2'
 ```
 
 ## Usage
 
-### Configuration, can be moved to rails initializer
+### Configuration
 
 ```ruby
 MaxmindGeoIP2.file '<local_db_file.mmdb>' # default: GeoLite2-City.mmdb
 MaxmindGeoIP2.locale 'ru' # default: 'ru'
 ```
+
+You could place above codes into a initializer file in Rails, for example `config/initializers/geoip2.rb`.
 
 ### Further usage:
 
@@ -62,3 +66,13 @@ city = MaxmindGeoIP2.locate '77.93.127.33', 'en'
 "longitude"=>41.4433,
 "time_zone"=>"Europe/Moscow"}
 ```
+
+## Testing
+
+```
+bundle exec rake
+```
+
+## License
+
+WTFPL
