@@ -12,46 +12,19 @@
 
 VALUE mMaxmindGeoIP2 = Qnil;
 
-
-const char **lookup_path_parse(char *lookup_path, char *lang)
-{
-
-    const char **result;
-    if (NULL != lang)
-        result = malloc(sizeof(char *) * (strlen(lookup_path) + strlen(lang) + 1 ));
-    else
-        result = malloc(sizeof(char *) * (strlen(lookup_path) + 1));
-
-    char *token;
-    char *string = strdup(lookup_path);
-
-    token = strtok(string, " ");
-    int i = 0;
-    while (token != NULL) {
-        result[i++] = token;
-        token = strtok(NULL, " ");
-    }
-    if (NULL != lang) {
-        result[i++] = lang;
-    }
-    result[i] = NULL;
-    return result;
-}
-
-VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang)
+VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path)
 {
     VALUE return_value = Qnil;
 
     MMDB_entry_data_s entry_data;
-    const char **lp = lookup_path_parse(lookup_path, lang);
-    int status = MMDB_aget_value(&result->entry, &entry_data, lp);
+    int status = MMDB_aget_value(&result->entry, &entry_data, lookup_path);
     if (MMDB_SUCCESS == status)
     {
         if (entry_data.offset)
         {
             if (entry_data.has_data) {
                 if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING)
-                    return_value = rb_enc_str_new(strndup((char *)entry_data.utf8_string, entry_data.data_size), entry_data.data_size, rb_utf8_encoding());
+                    return_value = rb_enc_str_new((char *)entry_data.utf8_string, entry_data.data_size, rb_utf8_encoding());
                 if (entry_data.type == MMDB_DATA_TYPE_UINT32)
                     return_value = rb_int_new(entry_data.uint32);
                 if (entry_data.type == MMDB_DATA_TYPE_DOUBLE)
@@ -59,7 +32,6 @@ VALUE locate_by_path(MMDB_lookup_result_s *result, char *lookup_path, char *lang
             }
         }
     }
-    free(lp);
     return return_value;
 }
 
@@ -103,21 +75,36 @@ VALUE mMaxmindGeoIP2_locate(int argc, VALUE *argv, VALUE self)
         if (result.found_entry)
         {
             locate_result = rb_hash_new();
-            rb_hash_aset(locate_result, rb_str_new2("city"), locate_by_path(&result, "city names", lang));
-            rb_hash_aset(locate_result, rb_str_new2("city_geoname_id"), locate_by_path(&result, "city geoname_id", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("country"), locate_by_path(&result, "country names", lang));
-            rb_hash_aset(locate_result, rb_str_new2("country_geoname_id"), locate_by_path(&result, "country geoname_id", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("country_code"), locate_by_path(&result, "country iso_code", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("continent"), locate_by_path(&result, "continent names", lang));
-            rb_hash_aset(locate_result, rb_str_new2("continent_code"), locate_by_path(&result, "continent code", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("continent_geoname_id"), locate_by_path(&result, "continent geoname_id", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, "subdivisions 0 names", lang));
-            rb_hash_aset(locate_result, rb_str_new2("subdivision_code"), locate_by_path(&result, "subdivisions 0 iso_code", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("subdivision_geoname_id"), locate_by_path(&result, "subdivisions 0 geoname_id", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("postal_code"), locate_by_path(&result, "postal code", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, "location latitude", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, "location longitude", NULL));
-            rb_hash_aset(locate_result, rb_str_new2("time_zone"), locate_by_path(&result, "location time_zone", NULL));
+            const char *city_path[] = { "city", "names", lang, NULL };
+            rb_hash_aset(locate_result, rb_str_new2("city"), locate_by_path(&result, city_path));
+            const char *city_geoname_id_path[] = { "city", "geoname_id", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("city_geoname_id"), locate_by_path(&result, city_geoname_id_path));
+            const char *country_path[] = { "country", "names", lang, NULL };
+            rb_hash_aset(locate_result, rb_str_new2("country"), locate_by_path(&result, country_path));
+            const char *country_geoname_id_path[] = { "country", "geoname_id", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("country_geoname_id"), locate_by_path(&result, country_geoname_id_path));
+            const char *country_code_path[] = { "country", "iso_code", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("country_code"), locate_by_path(&result, country_code_path));
+            const char *continent_path[] = { "continent", "names", lang, NULL };
+            rb_hash_aset(locate_result, rb_str_new2("continent"), locate_by_path(&result, continent_path));
+            const char *continent_code_path[] = { "continent", "code", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("continent_code"), locate_by_path(&result, continent_code_path));
+            const char *continent_geoname_id_path[] = { "continent", "geoname_id", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("continent_geoname_id"), locate_by_path(&result, continent_geoname_id_path));
+            const char *subdivision_path[] = { "subdivisions", "0", "names", lang, NULL };
+            rb_hash_aset(locate_result, rb_str_new2("subdivision"), locate_by_path(&result, subdivision_path));
+            const char *subdivision_code_path[] = { "subdivisions", "0", "iso_code", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("subdivision_code"), locate_by_path(&result, subdivision_code_path));
+            const char *subdivision_geoname_id_path[] = { "subdivisions", "0", "geoname_id", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("subdivision_geoname_id"), locate_by_path(&result, subdivision_geoname_id_path));
+            const char *postal_code_path[] = { "postal", "code", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("postal_code"), locate_by_path(&result, postal_code_path));
+            const char *latitude_path[] = { "location", "latitude", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("latitude"), locate_by_path(&result, latitude_path));
+            const char *longitude_path[] = { "location", "longitude", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("longitude"), locate_by_path(&result, longitude_path));
+            const char *time_zone_path[] = { "location", "time_zone", NULL };
+            rb_hash_aset(locate_result, rb_str_new2("time_zone"), locate_by_path(&result, time_zone_path));
         }
         MMDB_close(&mmdb);
     } else {
